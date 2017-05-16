@@ -72,6 +72,17 @@ public class GenericResource {
         return gson.toJson(lista);
     }
 
+    @GET
+    @Path("/productos/ofertas")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String listarOfertas() {
+        Conexion conexion = new Conexion();
+        List<Producto> lista;
+        lista = conexion.obtenerOfertas();
+        Gson gson = new Gson();
+        return gson.toJson(lista);
+    }
+
     /**
      * PUT method for updating or creating an instance of GenericResource
      *

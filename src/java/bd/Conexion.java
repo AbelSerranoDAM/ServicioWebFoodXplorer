@@ -76,6 +76,24 @@ public class Conexion {
         }
         return lista;
     }
+        public List<Producto> obtenerOfertas() {
+        List<Producto> lista = null;
+        try {
+            ResultSet rset;
+            lista = new ArrayList();
+            String sql = "SELECT * FROM Productos WHERE ofertaDescuento <> 0 AND activo = 1";
+            PreparedStatement stmt = getConnection().prepareStatement(sql);           
+            rset = stmt.executeQuery();
+            while (rset.next()) {
+                lista.add(new Producto(rset.getInt(1), rset.getString(2), rset.getDouble(3), rset.getInt(4),
+                        rset.getInt(5), rset.getInt(6), rset.getInt(7), rset.getString(8)));
+            }
+            finalizarConexion();
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return lista;
+    }
 
     public List<TipoProducto> obtenerTiposProducto() {
         List<TipoProducto> lista = null;
