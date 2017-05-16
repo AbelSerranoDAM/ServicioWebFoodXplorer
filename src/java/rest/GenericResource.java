@@ -7,6 +7,8 @@ package rest;
 
 import bd.Cliente;
 import bd.Conexion;
+import bd.Producto;
+import bd.TipoProducto;
 import bd.Usuario;
 import com.google.gson.Gson;
 import java.sql.SQLException;
@@ -49,50 +51,52 @@ public class GenericResource {
      * @return an instance of java.lang.String
      */
     @GET
+    @Path("/productos/tipo/buscarTiposProducto")
     @Produces(MediaType.APPLICATION_JSON)
-    public String listarClientes() {
+    public String listarProductosPorTipo() {
         Conexion conexion = new Conexion();
-        List<Cliente> lista = null;
-        try {
-            lista = conexion.obtenerClientes();
-
-        } catch (SQLException ex) {
-            Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        List<TipoProducto> lista;
+        lista = conexion.obtenerTiposProducto();
         Gson gson = new Gson();
+        return gson.toJson(lista);
+    }
 
+    @GET
+    @Path("/productos/tipo/{idTipoProducto}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String listarProductosPorTipo(@PathParam("idTipoProducto") int idTipoProducto) {
+        Conexion conexion = new Conexion();
+        List<Producto> lista;
+        lista = conexion.obtenerProductosPorTipo(idTipoProducto);
+        Gson gson = new Gson();
         return gson.toJson(lista);
     }
 
     /**
      * PUT method for updating or creating an instance of GenericResource
      *
-     * @param content representation for the resource
+     * @param u
+     * @return
      */
     @PUT
+    @Path("InsertarUsuario")
     @Consumes(MediaType.APPLICATION_JSON)
-    public boolean insertarCliente(String cli) {
+    public boolean insertarUsuario(String u) {
+        boolean result;
         Conexion conexion = new Conexion();
         Gson gson = new Gson();
-        Cliente cliente;
-        cliente = gson.fromJson(cli, Cliente.class);
-        boolean result = true;
-        try {
-
-            conexion.actualizarCliente(cliente);
-        } catch (SQLException ex) {
-            Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
-            result = false;
-        }
+        Usuario usu;
+        usu = gson.fromJson(u, Usuario.class);
+        result = conexion.insertarUsuario(usu);
         return result;
     }
 
     @GET
-    @Path("{nombre}/{password}")
+    @Path("/loguearUsuario/{nombre}/{password}")
     public boolean loguear(@PathParam("nombre") String nombre, @PathParam("password") String password) {
         boolean estado;
         Conexion conexion = new Conexion();
-        estado = conexion.loguear(nombre, password);  
+        estado = conexion.loguear(nombre, password);
         return estado;
     }
 
@@ -104,14 +108,7 @@ public class GenericResource {
         Cliente cliente;
         cliente = gson.fromJson(cli, Cliente.class);
         boolean result = true;
-        try {
-
-            conexion.insertarCliente(cliente);
-        } catch (SQLException ex) {
-            Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
-            result = false;
-
-        }
+        //conexion.insertarCliente(cliente);
         return result;
     }
 
