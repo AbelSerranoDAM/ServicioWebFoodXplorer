@@ -7,6 +7,8 @@ package rest;
 
 import bd.Cliente;
 import bd.Conexion;
+import bd.Direccion;
+import bd.Pedido;
 import bd.Producto;
 import bd.TipoProducto;
 import bd.Usuario;
@@ -83,6 +85,17 @@ public class GenericResource {
         return gson.toJson(lista);
     }
 
+    @GET
+    @Path("/pedidos/{idUsuario}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String listarPedidosPorUsuario(@PathParam("idUsuario") int idUsuario) {
+        Conexion conexion = new Conexion();
+        List<Pedido> lista;
+        lista = conexion.obtenerPedidosPorUsuario(idUsuario);
+        Gson gson = new Gson();
+        return gson.toJson(lista);
+    }
+
     /**
      * PUT method for updating or creating an instance of GenericResource
      *
@@ -100,6 +113,41 @@ public class GenericResource {
         usu = gson.fromJson(u, Usuario.class);
         result = conexion.insertarUsuario(usu);
         return result;
+    }
+
+    @POST
+    @Path("direccion/insertar")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public boolean insertarDireccion(String d) {
+        boolean result;
+        Conexion conexion = new Conexion();
+        Gson gson = new Gson();
+        Direccion dir;
+        dir = gson.fromJson(d, Direccion.class);
+        result = conexion.insertarDireccion(dir);
+        return result;
+    }
+
+    @GET
+    @Path("/direccion/obtener/{idUsuario}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String listarDireccionesPorUsuario(@PathParam("idUsuario") int idUsuario) {
+        Conexion conexion = new Conexion();
+        List<Direccion> lista;
+        lista = conexion.obtenerDireccionesPorUsuario(idUsuario);
+        Gson gson = new Gson();
+        return gson.toJson(lista);
+    }
+
+    @GET
+    @Path("/direccion/obtener2/{idDireccion}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String listarDireccion(@PathParam("idDireccion") int idDireccion) {
+        Conexion conexion = new Conexion();
+        Direccion d;
+        d = conexion.obtenerDireccion(idDireccion);
+        Gson gson = new Gson();
+        return gson.toJson(d);
     }
 
     @GET
