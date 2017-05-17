@@ -28,7 +28,7 @@ public class Conexion {
     public Conexion() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://localhost/pizzaexplorer", "root", "");
+            connection = DriverManager.getConnection("jdbc:mysql://mysql-dev-dam.blusoft.net/pizzaexplorer", "dam", "123456");
             // connection = DriverManager.getConnection("jdbc:oracle:thin:@ieslaferreria.xtec.cat:8081:INSLAFERRERI", "PROFEA1","1234");
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
