@@ -4,6 +4,8 @@ public class Producto {
 
     private int idProducto;
     private String nombre;
+    private String descripcion;
+
     private double precio;
     private int iva;
     private int ofertaDescuento;
@@ -14,9 +16,10 @@ public class Producto {
     public Producto() {
     }
 
-    public Producto(int idProducto, String nombre, double precio, int iva, int ofertaDescuento, int activo, int idTipoProducto, String urlImagen) {
+    public Producto(int idProducto, String nombre, String descripcion, double precio, int iva, int ofertaDescuento, int activo, int idTipoProducto, String urlImagen) {
         this.idProducto = idProducto;
         this.nombre = nombre;
+        this.descripcion = descripcion;
         this.precio = precio;
         this.iva = iva;
         this.ofertaDescuento = ofertaDescuento;
@@ -25,7 +28,21 @@ public class Producto {
         this.urlImagen = urlImagen;
     }
 
-  
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public String getUrlImagen() {
+        return urlImagen;
+    }
+
+    public void setUrlImagen(String urlImagen) {
+        this.urlImagen = urlImagen;
+    }
 
     public int getIdProducto() {
         return idProducto;
@@ -85,7 +102,7 @@ public class Producto {
 
     @Override
     public String toString() {
-        return "Producto{" + "idProducto=" + idProducto + ", nombre=" + nombre + ", precio=" + precio + ", iva=" + iva + ", ofertaDescuento=" + ofertaDescuento + ", activo=" + activo + ", idTipoProducto=" + idTipoProducto + '}';
+        return "Producto{" + "idProducto=" + idProducto + ", nombre=" + nombre + ", descripcion=" + descripcion + ", precio=" + precio + ", iva=" + iva + ", ofertaDescuento=" + ofertaDescuento + ", activo=" + activo + ", idTipoProducto=" + idTipoProducto + ", urlImagen=" + urlImagen + '}';
     }
 
 }

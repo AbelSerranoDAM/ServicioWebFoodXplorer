@@ -8,12 +8,15 @@ package rest;
 import bd.Cliente;
 import bd.Conexion;
 import bd.Direccion;
+import bd.Estado;
+import bd.LineasPedido;
 import bd.Pedido;
 import bd.Producto;
 import bd.TipoProducto;
 import bd.Usuario;
 import com.google.gson.Gson;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -86,6 +89,17 @@ public class GenericResource {
     }
 
     @GET
+    @Path("listarTodosLosProductos")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String listarTodosLosProductos() {
+        Conexion conexion = new Conexion();
+        List<Producto> lista;
+        lista = conexion.obtenerTodosProductos();
+        Gson gson = new Gson();
+        return gson.toJson(lista);
+    }
+
+    @GET
     @Path("/pedidos/{idUsuario}")
     @Produces(MediaType.APPLICATION_JSON)
     public String listarPedidosPorUsuario(@PathParam("idUsuario") int idUsuario) {
@@ -94,6 +108,17 @@ public class GenericResource {
         lista = conexion.obtenerPedidosPorUsuario(idUsuario);
         Gson gson = new Gson();
         return gson.toJson(lista);
+    }
+
+    @GET
+    @Path("/obtenerPedido/{idPedido}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String listarPedido(@PathParam("idPedido") int idPedido) {
+        Conexion conexion = new Conexion();
+        Pedido p;
+        p = conexion.obtenerPedido(idPedido);
+        Gson gson = new Gson();
+        return gson.toJson(p);
     }
 
     /**
@@ -125,6 +150,32 @@ public class GenericResource {
         Direccion dir;
         dir = gson.fromJson(d, Direccion.class);
         result = conexion.insertarDireccion(dir);
+        return result;
+    }
+
+    @POST
+    @Path("pedido/insertar")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public boolean insertarPedido(String p) throws ParseException {
+        boolean result;
+        Conexion conexion = new Conexion();
+        Gson gson = new Gson();
+        Pedido ped;
+        ped = gson.fromJson(p, Pedido.class);
+        result = conexion.insertarPedido(ped);
+        return result;
+    }
+
+    @POST
+    @Path("lineasPedido/insertar")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public boolean insertarLineasPedido(String lp) {
+        boolean result;
+        Conexion conexion = new Conexion();
+        Gson gson = new Gson();
+        LineasPedido lin;
+        lin = gson.fromJson(lp, LineasPedido.class);
+        result = conexion.insertarLineasPedido(lin);
         return result;
     }
 
@@ -168,6 +219,34 @@ public class GenericResource {
         cliente = gson.fromJson(cli, Cliente.class);
         boolean result = true;
         //conexion.insertarCliente(cliente);
+        return result;
+    }
+
+    @GET
+    @Path("/pedido/obtenerDetalles/{idPedido}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String listarProductosPorPedido(@PathParam("idPedido") int idPedido) {
+        Conexion conexion = new Conexion();
+        List<LineasPedido> lp;
+        lp = conexion.obtenerProductosPedido(idPedido);
+        Gson gson = new Gson();
+        return gson.toJson(lp);
+    }
+
+    @POST
+    @Path("actualizarEstado")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public boolean actualizarEstado(String es) {
+        boolean result = false;
+        try {
+            Conexion conexion = new Conexion();
+            Gson gson = new Gson();
+            Estado est;
+            est = gson.fromJson(es, Estado.class);
+            result = conexion.actualizarEstado(est);
+        } catch (SQLException ex) {
+            Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return result;
     }
 
