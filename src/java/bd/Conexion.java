@@ -12,9 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,11 +25,12 @@ public class Conexion {
 
     Connection connection;
 
+    /**
+     * Se crea una conexión Mysql.
+     */
     public Conexion() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-//            connection = DriverManager.getConnection("jdbc:mysql://mysql-dev-dam.blusoft.net/pizzaexplorer", "dam", "123456");
-            // connection = DriverManager.getConnection("jdbc:oracle:thin:@ieslaferreria.xtec.cat:8081:INSLAFERRERI", "PROFEA1","1234");
             connection = DriverManager.getConnection("jdbc:mysql://localhost/pizzaexplorer", "root", "");
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
@@ -39,14 +38,30 @@ public class Conexion {
 
     }
 
+    /**
+     * Retorna una conexión.
+     *
+     * @return Conexión
+     */
     public Connection getConnection() {
         return connection;
     }
 
+    /**
+     * Cierra la conexión
+     *
+     * @throws SQLException
+     */
     public void finalizarConexion() throws SQLException {
         connection.close();
     }
 
+    /**
+     * INSERTAR USUARIO
+     *
+     * @param u USUARIO
+     * @return RESULTADO INSERCIÓN
+     */
     public boolean insertarUsuario(Usuario u) {
         int res = 0;
         try {
@@ -62,6 +77,12 @@ public class Conexion {
         return (res == 1);
     }
 
+    /**
+     * INSERTAR DIRECCION
+     *
+     * @param d DIRECCION
+     * @return RESULTADO INSERCIÓN
+     */
     public boolean insertarDireccion(Direccion d) {
         int res = 0;
         try {
@@ -80,6 +101,13 @@ public class Conexion {
         return (res == 1);
     }
 
+    /**
+     * INSERTAR PEDIDO
+     *
+     * @param p PEDIDO
+     * @return RESULTADO INSERCIÓN
+     * @throws ParseException
+     */
     public boolean insertarPedido(Pedido p) throws ParseException {
         int res = 0;
         String sql = "INSERT INTO pedidos (Direcciones_idDireccion, idEstado, fecha_pedido, Usuarios_idUsuarios, fecha_entrega) "
@@ -104,6 +132,12 @@ public class Conexion {
         return (res == 1);
     }
 
+    /**
+     * INSERTAR LINEAS DE PEDIDO
+     *
+     * @param lp LINEASPEDIDO
+     * @return RESULTADO INSERCION
+     */
     public boolean insertarLineasPedido(LineasPedido lp) {
         int res = 0;
         try {
@@ -122,6 +156,12 @@ public class Conexion {
         return (res == 1);
     }
 
+    /**
+     * OBTENER PRODUCTOS POR TIPO
+     *
+     * @param idTipoProducto
+     * @return LISTA DE PRODUCTOS
+     */
     public List<Producto> obtenerProductosPorTipo(int idTipoProducto) {
         List<Producto> lista = null;
         try {
@@ -142,6 +182,12 @@ public class Conexion {
         return lista;
     }
 
+    /**
+     * OBTENER DIRECCIONES POR USUARIO
+     *
+     * @param idUsuario
+     * @return LISTA DIRECCIONES
+     */
     public List<Direccion> obtenerDireccionesPorUsuario(int idUsuario) {
         List<Direccion> lista = null;
         try {
@@ -161,6 +207,12 @@ public class Conexion {
         return lista;
     }
 
+    /**
+     * OBTENER DIRECCION POR ID
+     *
+     * @param idDireccion
+     * @return UNA DIRECCION
+     */
     public Direccion obtenerDireccion(int idDireccion) {
         Direccion d = null;
         try {
@@ -179,6 +231,11 @@ public class Conexion {
         return d;
     }
 
+    /**
+     * BUSCAR PRODUCTOS CON OFERTA
+     *
+     * @return LISTA DE OFERTAS
+     */
     public List<Producto> obtenerOfertas() {
         List<Producto> lista = null;
         try {
@@ -197,7 +254,13 @@ public class Conexion {
         }
         return lista;
     }
-      public List<Producto> obtenerTodosProductos() {
+
+    /**
+     * OBTENER TODOS LOS PRODUCTOS
+     *
+     * @return LISTA DE PRODUCTOS
+     */
+    public List<Producto> obtenerTodosProductos() {
         List<Producto> lista = null;
         try {
             ResultSet rset;
@@ -216,6 +279,12 @@ public class Conexion {
         return lista;
     }
 
+    /**
+     * OBTENER PEDIDOS POR USUARIO
+     *
+     * @param idUsuario
+     * @return LISTA DE PEDIDOS
+     */
     public List<Pedido> obtenerPedidosPorUsuario(int idUsuario) {
         List<Pedido> lista = null;
         try {
@@ -238,6 +307,12 @@ public class Conexion {
         return lista;
     }
 
+    /**
+     * OBTENER PEDIDO POR ID
+     *
+     * @param idPedido
+     * @return UN PEDIDO
+     */
     public Pedido obtenerPedido(int idPedido) {
         Pedido p = null;
         try {
@@ -256,6 +331,11 @@ public class Conexion {
         return p;
     }
 
+    /**
+     * OBTENER TODOS LOS TIPOS DE PRODUCTO
+     *
+     * @return LISTA DE TIPOS DE PRODUCTO
+     */
     public List<TipoProducto> obtenerTiposProducto() {
         List<TipoProducto> lista = null;
         try {
@@ -274,6 +354,13 @@ public class Conexion {
         return lista;
     }
 
+    /**
+     * SE LOGUEA UN USUARIO MEDIANTE NOMBRE DE USUARIO Y CONTRASEÑA
+     *
+     * @param nombreUsuario
+     * @param password
+     * @return RESULTADO DEL LOGUEO
+     */
     public boolean loguear(String nombreUsuario, String password) {
         boolean estado = false;
         ResultSet rset;
@@ -312,6 +399,12 @@ public class Conexion {
 //
 //        return (result);
 //    }
+    /**
+     * OBTENER LINEAS DE PEDIDO DE UN PEDIDO
+     *
+     * @param idPedido
+     * @return LISTA DE LINEAS DE PEDIDO
+     */
     public List<LineasPedido> obtenerProductosPedido(int idPedido) {
         List<LineasPedido> lista = null;
         try {
@@ -331,6 +424,13 @@ public class Conexion {
         return lista;
     }
 
+    /**
+     * ACTUALIZAR ESTADO DEL PRODUCTO
+     *
+     * @param es
+     * @return RESULTADO DE LA ACTUALIZACION
+     * @throws SQLException
+     */
     public boolean actualizarEstado(Estado es) throws SQLException {
         String sql = "UPDATE estados SET nomEstado = ?, tiempo = ? WHERE idEstados = ?";
         PreparedStatement stmt = connection.prepareStatement(sql);
