@@ -65,9 +65,9 @@ public class Conexion {
     public boolean insertarUsuario(Usuario u) {
         int res = 0;
         try {
-            String sql = "INSERT INTO Usuarios (nombreUsuario, contrasena) VALUES (?, ?)";
+            String sql = "INSERT INTO Usuarios (correo, contrasena) VALUES (?, ?)";
             PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setString(1, u.getNombreUsuario());
+            stmt.setString(1, u.getCorreo());
             stmt.setString(2, u.getContrasena());
             res = stmt.executeUpdate();
             finalizarConexion();
@@ -282,17 +282,17 @@ public class Conexion {
     /**
      * OBTENER PEDIDOS POR USUARIO
      *
-     * @param idUsuario
+     * @param correo
      * @return LISTA DE PEDIDOS
      */
-    public List<Pedido> obtenerPedidosPorUsuario(int idUsuario) {
+    public List<Pedido> obtenerPedidosPorUsuario(String correo) {
         List<Pedido> lista = null;
         try {
             ResultSet rset;
             lista = new ArrayList();
-            String sql = "SELECT * FROM pedidos WHERE Usuarios_idUsuarios = ?";
+            String sql = "SELECT idPedidos, Fecha_Pedido FROM pedidos WHERE Usuarios_correo = ?";
             PreparedStatement stmt = getConnection().prepareStatement(sql);
-            stmt.setInt(1, idUsuario);
+            stmt.setString(1, correo);
             rset = stmt.executeQuery();
             SimpleDateFormat salida = new SimpleDateFormat("dd-MM-yyyy");
             SimpleDateFormat entrega = new SimpleDateFormat("dd-MM-yyyy");
@@ -357,18 +357,18 @@ public class Conexion {
     /**
      * SE LOGUEA UN USUARIO MEDIANTE NOMBRE DE USUARIO Y CONTRASEÑA
      *
-     * @param nombreUsuario
+     * @param correo
      * @param password
      * @return RESULTADO DEL LOGUEO
      */
-    public boolean loguear(String nombreUsuario, String password) {
+    public boolean loguear(String correo, String password) {
         boolean estado = false;
         ResultSet rset;
         try {
-            String sql = "SELECT * FROM usuarios WHERE nombreUsuario = ? AND contrasena = ?";
+            String sql = "SELECT * FROM usuarios WHERE correo = ? AND contrasena = ?";
             PreparedStatement stmt;
             stmt = getConnection().prepareStatement(sql);
-            stmt.setString(1, nombreUsuario);
+            stmt.setString(1, correo);
             stmt.setString(2, password);
             rset = stmt.executeQuery();
             if (rset.next()) {

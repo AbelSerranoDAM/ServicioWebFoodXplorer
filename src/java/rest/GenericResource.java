@@ -104,12 +104,12 @@ public class GenericResource {
     }
 
     @GET
-    @Path("/pedidos/{idUsuario}")
+    @Path("/pedidos/{correo}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String listarPedidosPorUsuario(@PathParam("idUsuario") int idUsuario) {
+    public String listarPedidosPorUsuario(@PathParam("correo") String correo) {
         Conexion conexion = new Conexion();
         List<Pedido> lista;
-        lista = conexion.obtenerPedidosPorUsuario(idUsuario);
+        lista = conexion.obtenerPedidosPorUsuario(correo);
         Gson gson = new Gson();
         return gson.toJson(lista);
     }
@@ -125,7 +125,6 @@ public class GenericResource {
         return gson.toJson(p);
     }
 
-  
     @PUT
     @Path("InsertarUsuario")
     @Consumes(MediaType.APPLICATION_JSON)

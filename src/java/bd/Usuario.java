@@ -3,15 +3,15 @@ package bd;
 public class Usuario {
 
     private int idUsuario;
-    private String nombreUsuario;
+    private String correo;
     private String contrasena;
 
     public Usuario() {
     }
 
-    public Usuario(int idUsuario, String nombreUsuario, String contrasena) {
+    public Usuario(int idUsuario, String correo, String contrasena) {
         this.idUsuario = idUsuario;
-        this.nombreUsuario = nombreUsuario;
+        this.correo = correo;
         this.contrasena = contrasena;
     }
 
@@ -23,12 +23,12 @@ public class Usuario {
         this.idUsuario = idUsuario;
     }
 
-    public String getNombreUsuario() {
-        return nombreUsuario;
+    public String getCorreo() {
+        return correo;
     }
 
-    public void setNombreUsuario(String nombreUsuario) {
-        this.nombreUsuario = nombreUsuario;
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 
     public String getContrasena() {
@@ -41,7 +41,7 @@ public class Usuario {
 
     @Override
     public String toString() {
-        return "Usuario{" + "idUsuarios=" + idUsuario + ", nombreUsuario=" + nombreUsuario + ", contrasena=" + contrasena + '}';
+        return "Usuario{" + "idUsuario=" + idUsuario + ", correo=" + correo + ", contrasena=" + contrasena + '}';
     }
 
 }
