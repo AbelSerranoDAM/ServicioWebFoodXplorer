@@ -2,17 +2,17 @@ package bd;
 
 public class Pedido {
 
-    private long idPedido;
+    private int idPedido;
     private int idDireccion;
     private int idEstado;
     private String fechaSalida;
-    private String idUsuario;
+    private int idUsuario;
     private String fechaEntrega;
 
     public Pedido() {
     }
 
-    public Pedido(long idPedido, int idDireccion, int idEstado, String fechaSalida, String idUsuario, String fechaEntrega) {
+    public Pedido(int idPedido, int idDireccion, int idEstado, String fechaSalida, int idUsuario, String fechaEntrega) {
         this.idPedido = idPedido;
         this.idDireccion = idDireccion;
         this.idEstado = idEstado;
@@ -21,11 +21,11 @@ public class Pedido {
         this.fechaEntrega = fechaEntrega;
     }
 
-    public long getIdPedido() {
+    public int getIdPedido() {
         return idPedido;
     }
 
-    public void setIdPedido(long idPedido) {
+    public void setIdPedido(int idPedido) {
         this.idPedido = idPedido;
     }
 
@@ -53,11 +53,11 @@ public class Pedido {
         this.fechaSalida = fechaSalida;
     }
 
-    public String getIdUsuario() {
+    public int getIdUsuario() {
         return idUsuario;
     }
 
-    public void setIdUsuario(String idUsuario) {
+    public void setIdUsuario(int idUsuario) {
         this.idUsuario = idUsuario;
     }
 

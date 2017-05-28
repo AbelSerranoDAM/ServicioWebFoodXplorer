@@ -110,7 +110,7 @@ public class Conexion {
      */
     public boolean insertarPedido(Pedido p) throws ParseException {
         int res = 0;
-        String sql = "INSERT INTO pedidos (idPedidos,Direcciones_idDireccion, idEstado, fecha_pedido, Usuarios_idUsuarios, fecha_entrega) "
+        String sql = "INSERT INTO pedidos (Direcciones_idDireccion, idEstado, fecha_pedido, Usuarios_idUsuarios, fecha_entrega) "
                 + "VALUES (?,?,?,?,?)";
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         java.util.Date fechaSalida = formatter.parse(p.getFechaSalida());
@@ -119,12 +119,11 @@ public class Conexion {
         java.sql.Date fechaEntregaSQL = new java.sql.Date(fechaEntrega.getTime());
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setLong(1, p.getIdPedido());
-            stmt.setInt(2, p.getIdDireccion());
-            stmt.setInt(3, p.getIdEstado());
-            stmt.setDate(4, fechaSalidaSQL);
-            stmt.setString(5, p.getIdUsuario());
-            stmt.setDate(6, fechaEntregaSQL);
+            stmt.setInt(1, p.getIdDireccion());
+            stmt.setInt(2, p.getIdEstado());
+            stmt.setDate(3, fechaSalidaSQL);
+            stmt.setInt(4, p.getIdUsuario());
+            stmt.setDate(5, fechaEntregaSQL);
             res = stmt.executeUpdate();
             finalizarConexion();
         } catch (SQLException ex) {
@@ -291,15 +290,15 @@ public class Conexion {
         try {
             ResultSet rset;
             lista = new ArrayList();
-            String sql = "SELECT * FROM pedidos WHERE Usuarios_correo = ?";
+            String sql = "SELECT idPedidos, Fecha_Pedido FROM pedidos WHERE Usuarios_correo = ?";
             PreparedStatement stmt = getConnection().prepareStatement(sql);
             stmt.setString(1, correo);
             rset = stmt.executeQuery();
             SimpleDateFormat salida = new SimpleDateFormat("dd-MM-yyyy");
             SimpleDateFormat entrega = new SimpleDateFormat("dd-MM-yyyy");
             while (rset.next()) {
-                lista.add(new Pedido(rset.getLong(1), rset.getInt(2), rset.getInt(3), salida.format(rset.getDate(4)),
-                        rset.getString(5), entrega.format(rset.getDate(6))));
+                lista.add(new Pedido(rset.getInt(1), rset.getInt(2), rset.getInt(3), salida.format(rset.getDate(4)),
+                        rset.getInt(5), entrega.format(rset.getDate(6))));
             }
             finalizarConexion();
         } catch (SQLException ex) {
@@ -314,16 +313,16 @@ public class Conexion {
      * @param idPedido
      * @return UN PEDIDO
      */
-    public Pedido obtenerPedido(String idPedido) {
+    public Pedido obtenerPedido(int idPedido) {
         Pedido p = null;
         try {
             ResultSet rset;
             String sql = "SELECT * FROM pedidos WHERE idPedidos = ?";
             PreparedStatement stmt = getConnection().prepareStatement(sql);
-            stmt.setString(1, idPedido);
+            stmt.setInt(1, idPedido);
             rset = stmt.executeQuery();
             while (rset.next()) {
-                p = new Pedido(rset.getLong(1), rset.getInt(2), rset.getInt(3), rset.getString(4), rset.getString(5), rset.getString(6));
+                p = new Pedido(rset.getInt(1), rset.getInt(2), rset.getInt(3), rset.getString(4), rset.getInt(5), rset.getString(6));
             }
             finalizarConexion();
         } catch (SQLException ex) {
@@ -423,49 +422,6 @@ public class Conexion {
             Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
         }
         return lista;
-    }
-
-    public Estado obtenerEstado(String idEstado) {
-        Estado es = null;
-        try {
-            ResultSet rset;
-            String sql = "SELECT * FROM estados WHERE idEstados = ?";
-            PreparedStatement stmt = getConnection().prepareStatement(sql);
-            stmt.setString(1, idEstado);
-            rset = stmt.executeQuery();
-            while (rset.next()) {
-                es = new Estado(rset.getInt(1), rset.getString(2), rset.getInt(3));
-            }
-            finalizarConexion();
-        } catch (SQLException ex) {
-            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return es;
-    }
-
-    public List<Producto> obtenerProductosPorIdPedido(String idPedido) {
-        List<Producto> listaProductos = new ArrayList();
-        try {
-            ResultSet rset;
-            String sql = "SELECT p.idProducto, p.Nombre, p.Descripcion, "
-                    + "p.Precio, p.Iva, p.OfertaDescuento, p.Activo, "
-                    + "p.tipoProductos_idTipoProducto, p.urlImagen "
-                    + "FROM pedidos ped, lineaspedidos l, productos p "
-                    + "WHERE ped.idPedidos = l.idPedidos "
-                    + "AND l.Producto_idProducto = p.idProducto AND \n"
-                    + "ped.idPedidos=?";
-            PreparedStatement stmt = getConnection().prepareStatement(sql);
-            stmt.setString(1, idPedido);
-            rset = stmt.executeQuery();
-            while (rset.next()) {              
-                listaProductos.add(new Producto(rset.getInt(1), rset.getString(2), rset.getString(3), rset.getDouble(4), rset.getInt(5),
-                        rset.getInt(6), rset.getInt(7), rset.getInt(8), rset.getString(9)));
-            }
-            finalizarConexion();
-        } catch (SQLException ex) {
-            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return listaProductos;
     }
 
     /**

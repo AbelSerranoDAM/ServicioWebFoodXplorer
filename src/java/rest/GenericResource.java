@@ -117,34 +117,12 @@ public class GenericResource {
     @GET
     @Path("/obtenerPedido/{idPedido}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String listarPedido(@PathParam("idPedido") String idPedido) {
+    public String listarPedido(@PathParam("idPedido") int idPedido) {
         Conexion conexion = new Conexion();
         Pedido p;
         p = conexion.obtenerPedido(idPedido);
         Gson gson = new Gson();
         return gson.toJson(p);
-    }
-
-    @GET
-    @Path("/obtenerEstado/{idEstado}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public String obtenerEstado(@PathParam("idEstado") String idEstado) {
-        Conexion conexion = new Conexion();
-        Estado es;
-        es = conexion.obtenerEstado(idEstado);
-        Gson gson = new Gson();
-        return gson.toJson(es);
-    }
-
-    @GET
-    @Path("/obtenerProductosPorIdPedido/{idPedido}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public String obtenerProductosPorIdPedido(@PathParam("idPedido") String idPedido) {
-        Conexion conexion = new Conexion();
-        List<Producto> listaProductos;
-        listaProductos = conexion.obtenerProductosPorIdPedido(idPedido);
-        Gson gson = new Gson();
-        return gson.toJson(listaProductos);
     }
 
     @PUT
