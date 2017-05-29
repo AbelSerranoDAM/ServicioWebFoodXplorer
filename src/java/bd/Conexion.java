@@ -31,7 +31,8 @@ public class Conexion {
     public Conexion() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://localhost/pizzaexplorer", "root", "");
+            connection = DriverManager.getConnection("jdbc:mysql://server.blusoft.net:3306/pizzaExplorer", "dam", "1234");
+            //connection = DriverManager.getConnection("jdbc:mysql://localhost/pizzaexplorer", "dam", "");
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -110,7 +111,7 @@ public class Conexion {
      */
     public boolean insertarPedido(Pedido p) throws ParseException {
         int res = 0;
-        String sql = "INSERT INTO pedidos (idPedidos,Direcciones_idDireccion, idEstado, fecha_pedido, Usuarios_idUsuarios, fecha_entrega) "
+        String sql = "INSERT INTO Pedidos (idPedidos,Direcciones_idDireccion, idEstado, fecha_pedido, Usuarios_idUsuarios, fecha_entrega) "
                 + "VALUES (?,?,?,?,?)";
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         java.util.Date fechaSalida = formatter.parse(p.getFechaSalida());
@@ -142,7 +143,7 @@ public class Conexion {
     public boolean insertarLineasPedido(LineasPedido lp) {
         int res = 0;
         try {
-            String sql = "INSERT INTO lineaspedidos (idPedidos, Producto_idProducto, cantidad, precio, IVA) VALUES (?,?,?,?,?)";
+            String sql = "INSERT INTO LineasPedidos (idPedidos, Producto_idProducto, cantidad, precio, IVA) VALUES (?,?,?,?,?)";
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setInt(1, lp.getIdPedido());
             stmt.setInt(2, lp.getIdProducto());
@@ -194,7 +195,7 @@ public class Conexion {
         try {
             ResultSet rset;
             lista = new ArrayList();
-            String sql = "SELECT * FROM direcciones WHERE usuarios_idUsuarios = ?";
+            String sql = "SELECT * FROM Direcciones WHERE usuarios_idUsuarios = ?";
             PreparedStatement stmt = getConnection().prepareStatement(sql);
             stmt.setInt(1, idUsuario);
             rset = stmt.executeQuery();
@@ -218,7 +219,7 @@ public class Conexion {
         Direccion d = null;
         try {
             ResultSet rset;
-            String sql = "SELECT * FROM direcciones WHERE idDireccion = ?";
+            String sql = "SELECT * FROM Direcciones WHERE idDireccion = ?";
             PreparedStatement stmt = getConnection().prepareStatement(sql);
             stmt.setInt(1, idDireccion);
             rset = stmt.executeQuery();
@@ -291,7 +292,7 @@ public class Conexion {
         try {
             ResultSet rset;
             lista = new ArrayList();
-            String sql = "SELECT * FROM pedidos WHERE Usuarios_correo = ?";
+            String sql = "SELECT * FROM Pedidos WHERE Usuarios_correo = ?";
             PreparedStatement stmt = getConnection().prepareStatement(sql);
             stmt.setString(1, correo);
             rset = stmt.executeQuery();
@@ -318,7 +319,7 @@ public class Conexion {
         Pedido p = null;
         try {
             ResultSet rset;
-            String sql = "SELECT * FROM pedidos WHERE idPedidos = ?";
+            String sql = "SELECT * FROM Pedidos WHERE idPedidos = ?";
             PreparedStatement stmt = getConnection().prepareStatement(sql);
             stmt.setString(1, idPedido);
             rset = stmt.executeQuery();
@@ -342,7 +343,7 @@ public class Conexion {
         try {
             ResultSet rset;
             lista = new ArrayList();
-            String sql = "SELECT * FROM tipoproductos";
+            String sql = "SELECT * FROM tipoProductos";
             PreparedStatement stmt = getConnection().prepareStatement(sql);
             rset = stmt.executeQuery();
             while (rset.next()) {
@@ -366,7 +367,7 @@ public class Conexion {
         boolean estado = false;
         ResultSet rset;
         try {
-            String sql = "SELECT * FROM usuarios WHERE correo = ? AND contrasena = ?";
+            String sql = "SELECT * FROM Usuarios WHERE correo = ? AND contrasena = ?";
             PreparedStatement stmt;
             stmt = getConnection().prepareStatement(sql);
             stmt.setString(1, correo);
@@ -411,7 +412,7 @@ public class Conexion {
         try {
             ResultSet rset;
             lista = new ArrayList();
-            String sql = "SELECT * FROM lineaspedidos WHERE idPedidos = ?";
+            String sql = "SELECT * FROM LineasPedidos WHERE idPedidos = ?";
             PreparedStatement stmt = getConnection().prepareStatement(sql);
             stmt.setInt(1, idPedido);
             rset = stmt.executeQuery();
@@ -429,7 +430,7 @@ public class Conexion {
         Estado es = null;
         try {
             ResultSet rset;
-            String sql = "SELECT * FROM estados WHERE idEstados = ?";
+            String sql = "SELECT * FROM Estados WHERE idEstados = ?";
             PreparedStatement stmt = getConnection().prepareStatement(sql);
             stmt.setString(1, idEstado);
             rset = stmt.executeQuery();
@@ -450,7 +451,7 @@ public class Conexion {
             String sql = "SELECT p.idProducto, p.Nombre, p.Descripcion, "
                     + "p.Precio, p.Iva, p.OfertaDescuento, p.Activo, "
                     + "p.tipoProductos_idTipoProducto, p.urlImagen "
-                    + "FROM pedidos ped, lineaspedidos l, productos p "
+                    + "FROM Pedidos ped, LineasPedidos l, Productos p "
                     + "WHERE ped.idPedidos = l.idPedidos "
                     + "AND l.Producto_idProducto = p.idProducto AND \n"
                     + "ped.idPedidos=?";
@@ -476,7 +477,7 @@ public class Conexion {
      * @throws SQLException
      */
     public boolean actualizarEstado(Estado es) throws SQLException {
-        String sql = "UPDATE estados SET nomEstado = ?, tiempo = ? WHERE idEstados = ?";
+        String sql = "UPDATE Estados SET nomEstado = ?, tiempo = ? WHERE idEstados = ?";
         PreparedStatement stmt = connection.prepareStatement(sql);
         stmt.setString(1, es.getNombreEstado());
         stmt.setInt(2, es.getTiempo());
