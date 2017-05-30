@@ -238,7 +238,7 @@ public class Conexion {
         Direccion d = null;
         try {
             ResultSet rset;
-            String sql = "SELECT * FROM Direcciones WHERE idDireccion = ?";
+            String sql = "SELECT * FROM direcciones WHERE idDireccion = ?";
             PreparedStatement stmt = getConnection().prepareStatement(sql);
             stmt.setInt(1, idDireccion);
             rset = stmt.executeQuery();
