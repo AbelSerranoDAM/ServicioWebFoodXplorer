@@ -396,7 +396,7 @@ public class Conexion {
         boolean estado = false;
         ResultSet rset;
         try {
-            String sql = "SELECT * FROM Usuarios WHERE correo = ? AND contrasena = ?";
+            String sql = "SELECT * FROM usuarios WHERE correo = ? AND contrasena = ?";
             PreparedStatement stmt;
             stmt = getConnection().prepareStatement(sql);
             stmt.setString(1, correo);
@@ -459,7 +459,7 @@ public class Conexion {
         Estado es = null;
         try {
             ResultSet rset;
-            String sql = "SELECT * FROM Estados WHERE idEstados = ?";
+            String sql = "SELECT * FROM estados WHERE idEstados = ?";
             PreparedStatement stmt = getConnection().prepareStatement(sql);
             stmt.setString(1, idEstado);
             rset = stmt.executeQuery();
@@ -527,7 +527,7 @@ public class Conexion {
      * @throws SQLException
      */
     public boolean actualizarEstado(Estado es) throws SQLException {
-        String sql = "UPDATE Estados SET nomEstado = ?, tiempo = ? WHERE idEstados = ?";
+        String sql = "UPDATE estados SET nomEstado = ?, tiempo = ? WHERE idEstados = ?";
         PreparedStatement stmt = connection.prepareStatement(sql);
         stmt.setString(1, es.getNombreEstado());
         stmt.setInt(2, es.getTiempo());
