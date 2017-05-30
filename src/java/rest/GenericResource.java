@@ -44,7 +44,7 @@ import javax.ws.rs.core.MediaType;
  */
 @Path("generic")
 public class GenericResource {
-
+    
     @Context
     private UriInfo context;
 
@@ -69,7 +69,7 @@ public class GenericResource {
         Gson gson = new Gson();
         return gson.toJson(lista);
     }
-
+    
     @GET
     @Path("/productos/tipo/{idTipoProducto}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -80,7 +80,7 @@ public class GenericResource {
         Gson gson = new Gson();
         return gson.toJson(lista);
     }
-
+    
     @GET
     @Path("/productos/ofertas")
     @Produces(MediaType.APPLICATION_JSON)
@@ -91,7 +91,7 @@ public class GenericResource {
         Gson gson = new Gson();
         return gson.toJson(lista);
     }
-
+    
     @GET
     @Path("listarTodosLosProductos")
     @Produces(MediaType.APPLICATION_JSON)
@@ -102,7 +102,7 @@ public class GenericResource {
         Gson gson = new Gson();
         return gson.toJson(lista);
     }
-
+    
     @GET
     @Path("/pedidos/{correo}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -113,7 +113,7 @@ public class GenericResource {
         Gson gson = new Gson();
         return gson.toJson(lista);
     }
-
+    
     @GET
     @Path("/obtenerPedido/{idPedido}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -124,7 +124,7 @@ public class GenericResource {
         Gson gson = new Gson();
         return gson.toJson(p);
     }
-
+    
     @GET
     @Path("/obtenerEstado/{idEstado}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -135,7 +135,7 @@ public class GenericResource {
         Gson gson = new Gson();
         return gson.toJson(es);
     }
-
+    
     @GET
     @Path("/obtenerProductosPorIdPedido/{idPedido}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -146,7 +146,7 @@ public class GenericResource {
         Gson gson = new Gson();
         return gson.toJson(listaProductos);
     }
-
+    
     @PUT
     @Path("InsertarUsuario")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -159,7 +159,7 @@ public class GenericResource {
         result = conexion.insertarUsuario(usu);
         return result;
     }
-
+    
     @POST
     @Path("direccion/insertar")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -172,7 +172,7 @@ public class GenericResource {
         result = conexion.insertarDireccion(dir);
         return result;
     }
-
+    
     @POST
     @Path("pedido/insertar")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -185,7 +185,7 @@ public class GenericResource {
         result = conexion.insertarPedido(ped);
         return result;
     }
-
+    
     @POST
     @Path("lineasPedido/insertar")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -198,7 +198,7 @@ public class GenericResource {
         result = conexion.insertarLineasPedido(lin);
         return result;
     }
-
+    
     @GET
     @Path("/direccion/obtener/{idUsuario}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -209,7 +209,18 @@ public class GenericResource {
         Gson gson = new Gson();
         return gson.toJson(lista);
     }
-
+    
+    @GET
+    @Path("/direccion/obtenerPorCorreo/{correo}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String listarDireccionesPorCorreo(@PathParam("correo") String correo) {
+        Conexion conexion = new Conexion();
+        List<Direccion> lista;
+        lista = conexion.obtenerDireccionesPorCorreo(correo);
+        Gson gson = new Gson();
+        return gson.toJson(lista);
+    }
+    
     @GET
     @Path("/direccion/obtener2/{idDireccion}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -220,7 +231,7 @@ public class GenericResource {
         Gson gson = new Gson();
         return gson.toJson(d);
     }
-
+    
     @GET
     @Path("/loguearUsuario/{nombre}/{password}")
     public boolean loguear(@PathParam("nombre") String nombre, @PathParam("password") String password) {
@@ -229,7 +240,7 @@ public class GenericResource {
         estado = conexion.loguear(nombre, password);
         return estado;
     }
-
+    
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public boolean actualizarCliente(String cli) {
@@ -241,7 +252,7 @@ public class GenericResource {
         //conexion.insertarCliente(cliente);
         return result;
     }
-
+    
     @GET
     @Path("/pedido/obtenerDetalles/{idPedido}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -252,7 +263,7 @@ public class GenericResource {
         Gson gson = new Gson();
         return gson.toJson(lp);
     }
-
+    
     @GET
     @Path("/obtenerPedidosPorCocinar")
     @Produces(MediaType.APPLICATION_JSON)
@@ -263,7 +274,7 @@ public class GenericResource {
         Gson gson = new Gson();
         return gson.toJson(lp);
     }
-
+    
     @POST
     @Path("actualizarEstado")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -280,5 +291,5 @@ public class GenericResource {
         }
         return result;
     }
-
+    
 }

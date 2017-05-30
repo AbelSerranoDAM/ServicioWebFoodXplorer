@@ -12,7 +12,7 @@ public class Pedido {
     public Pedido() {
     }
 
-    public Pedido(long idPedido, int idDireccion, int idEstado, String fechaSalida, String idUsuario, String fechaEntrega) {
+    public Pedido(long idPedido, int idDireccion, int idEstado, String fechaSalida, String fechaEntrega, String idUsuario) {
         this.idPedido = idPedido;
         this.idDireccion = idDireccion;
         this.idEstado = idEstado;

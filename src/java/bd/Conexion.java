@@ -111,7 +111,7 @@ public class Conexion {
      */
     public boolean insertarPedido(Pedido p) throws ParseException {
         int res = 0;
-        String sql = "INSERT INTO Pedidos (idPedidos,Direcciones_idDireccion, idEstado, fecha_pedido, Usuarios_idUsuarios, fecha_entrega) "
+        String sql = "INSERT INTO Pedidos (Direcciones_idDireccion, idEstado, fecha_pedido, Usuarios_idUsuarios, fecha_entrega) "
                 + "VALUES (?,?,?,?,?)";
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         java.util.Date fechaSalida = formatter.parse(p.getFechaSalida());
@@ -120,12 +120,11 @@ public class Conexion {
         java.sql.Date fechaEntregaSQL = new java.sql.Date(fechaEntrega.getTime());
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setLong(1, p.getIdPedido());
-            stmt.setInt(2, p.getIdDireccion());
-            stmt.setInt(3, p.getIdEstado());
-            stmt.setDate(4, fechaSalidaSQL);
-            stmt.setString(5, p.getIdUsuario());
-            stmt.setDate(6, fechaEntregaSQL);
+            stmt.setInt(1, p.getIdDireccion());
+            stmt.setInt(2, p.getIdEstado());
+            stmt.setDate(3, fechaSalidaSQL);
+            stmt.setString(4, p.getIdUsuario());
+            stmt.setDate(5, fechaEntregaSQL);
             res = stmt.executeUpdate();
             finalizarConexion();
         } catch (SQLException ex) {
@@ -198,6 +197,26 @@ public class Conexion {
             String sql = "SELECT * FROM Direcciones WHERE usuarios_idUsuarios = ?";
             PreparedStatement stmt = getConnection().prepareStatement(sql);
             stmt.setInt(1, idUsuario);
+            rset = stmt.executeQuery();
+            while (rset.next()) {
+                lista.add(new Direccion(rset.getInt(1), rset.getString(2), rset.getString(3), rset.getString(4), rset.getString(5), rset.getInt(6)));
+            }
+            finalizarConexion();
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return lista;
+    }
+
+    public List<Direccion> obtenerDireccionesPorCorreo(String correo) {
+        List<Direccion> lista = null;
+        try {
+            ResultSet rset;
+            lista = new ArrayList();
+            String sql = "SELECT d.idDireccion, d.Calle, d.Piso, d.Poblacion, d.CodPostal , d.Usuarios_idUsuarios "
+                    + "FROM direcciones d, usuarios u WHERE d.Usuarios_idUsuarios = u.idUsuarios AND u.correo = ?";
+            PreparedStatement stmt = getConnection().prepareStatement(sql);
+            stmt.setString(1, correo);
             rset = stmt.executeQuery();
             while (rset.next()) {
                 lista.add(new Direccion(rset.getInt(1), rset.getString(2), rset.getString(3), rset.getString(4), rset.getString(5), rset.getInt(6)));
@@ -451,14 +470,14 @@ public class Conexion {
             String sql = "SELECT p.idProducto, p.Nombre, p.Descripcion, "
                     + "p.Precio, p.Iva, p.OfertaDescuento, p.Activo, "
                     + "p.tipoProductos_idTipoProducto, p.urlImagen "
-                    + "FROM Pedidos ped, LineasPedidos l, Productos p "
+                    + "FROM pedidos ped, lineasPedidos l, productos p "
                     + "WHERE ped.idPedidos = l.idPedidos "
                     + "AND l.Producto_idProducto = p.idProducto AND \n"
                     + "ped.idPedidos=?";
             PreparedStatement stmt = getConnection().prepareStatement(sql);
             stmt.setString(1, idPedido);
             rset = stmt.executeQuery();
-            while (rset.next()) {              
+            while (rset.next()) {
                 listaProductos.add(new Producto(rset.getInt(1), rset.getString(2), rset.getString(3), rset.getDouble(4), rset.getInt(5),
                         rset.getInt(6), rset.getInt(7), rset.getInt(8), rset.getString(9)));
             }
@@ -468,19 +487,20 @@ public class Conexion {
         }
         return listaProductos;
     }
-     public List<Pedido> obtenerTodosLosPedidosParaCocinar() {
+
+    public List<Pedido> obtenerTodosLosPedidosParaCocinar() {
         List<Pedido> lista = null;
         try {
             ResultSet rset;
             lista = new ArrayList();
-            String sql = "SELECT * FROM pedidos WHERE idEstado = 2";
+            String sql = "SELECT * FROM pedidos WHERE idEstado = 1";
             PreparedStatement stmt = getConnection().prepareStatement(sql);
             rset = stmt.executeQuery();
             SimpleDateFormat salida = new SimpleDateFormat("dd-MM-yyyy");
             SimpleDateFormat entrega = new SimpleDateFormat("dd-MM-yyyy");
             while (rset.next()) {
                 lista.add(new Pedido(rset.getLong(1), rset.getInt(2), rset.getInt(3), salida.format(rset.getDate(4)),
-                        rset.getString(5), entrega.format(rset.getDate(6))));
+                        entrega.format(rset.getDate(5)), rset.getString(6)));
             }
             finalizarConexion();
         } catch (SQLException ex) {
