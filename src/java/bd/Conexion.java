@@ -87,7 +87,7 @@ public class Conexion {
     public boolean insertarDireccion(Direccion d) {
         int res = 0;
         try {
-            String sql = "INSERT INTO Direcciones (calle, piso, poblacion, codPostal, Usuarios_idUsuarios) VALUES (?,?,?,?,?)";
+            String sql = "INSERT INTO direcciones (calle, piso, poblacion, codPostal, Usuarios_idUsuarios) VALUES (?,?,?,?,?)";
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setString(1, d.getCalle());
             stmt.setString(2, d.getPiso());
