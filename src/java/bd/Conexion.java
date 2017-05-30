@@ -468,6 +468,26 @@ public class Conexion {
         }
         return listaProductos;
     }
+     public List<Pedido> obtenerTodosLosPedidosParaCocinar() {
+        List<Pedido> lista = null;
+        try {
+            ResultSet rset;
+            lista = new ArrayList();
+            String sql = "SELECT * FROM pedidos WHERE idEstado = 2";
+            PreparedStatement stmt = getConnection().prepareStatement(sql);
+            rset = stmt.executeQuery();
+            SimpleDateFormat salida = new SimpleDateFormat("dd-MM-yyyy");
+            SimpleDateFormat entrega = new SimpleDateFormat("dd-MM-yyyy");
+            while (rset.next()) {
+                lista.add(new Pedido(rset.getLong(1), rset.getInt(2), rset.getInt(3), salida.format(rset.getDate(4)),
+                        rset.getString(5), entrega.format(rset.getDate(6))));
+            }
+            finalizarConexion();
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return lista;
+    }
 
     /**
      * ACTUALIZAR ESTADO DEL PRODUCTO

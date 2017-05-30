@@ -253,6 +253,17 @@ public class GenericResource {
         return gson.toJson(lp);
     }
 
+    @GET
+    @Path("/obtenerPedidosPorCocinar")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String listarPedidosPorCocinar() {
+        Conexion conexion = new Conexion();
+        List<Pedido> lp;
+        lp = conexion.obtenerTodosLosPedidosParaCocinar();
+        Gson gson = new Gson();
+        return gson.toJson(lp);
+    }
+
     @POST
     @Path("actualizarEstado")
     @Consumes(MediaType.APPLICATION_JSON)
