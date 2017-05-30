@@ -86,14 +86,24 @@ public class Conexion {
      */
     public boolean insertarDireccion(Direccion d) {
         int res = 0;
+        PreparedStatement stmt;
         try {
-            String sql = "INSERT INTO direcciones (calle, piso, poblacion, codPostal, Usuarios_idUsuarios) VALUES (?,?,?,?,?)";
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setString(1, d.getCalle());
-            stmt.setString(2, d.getPiso());
-            stmt.setString(3, d.getPoblacion());
-            stmt.setString(4, d.getCodPostal());
-            stmt.setObject(5, d.getIdUsuario());
+            if (d.getIdUsuario() != 0) {
+                String sql = "INSERT INTO direcciones (calle, piso, poblacion, codPostal, Usuarios_idUsuarios) VALUES (?,?,?,?,?)";
+                stmt = connection.prepareStatement(sql);
+                stmt.setString(1, d.getCalle());
+                stmt.setString(2, d.getPiso());
+                stmt.setString(3, d.getPoblacion());
+                stmt.setString(4, d.getCodPostal());
+                stmt.setInt(5, d.getIdUsuario());
+            } else {
+                String sql = "INSERT INTO direcciones (calle, piso, poblacion, codPostal) VALUES (?,?,?,?)";
+                stmt = connection.prepareStatement(sql);
+                stmt.setString(1, d.getCalle());
+                stmt.setString(2, d.getPiso());
+                stmt.setString(3, d.getPoblacion());
+                stmt.setString(4, d.getCodPostal());
+            }
             res = stmt.executeUpdate();
             finalizarConexion();
         } catch (SQLException ex) {
