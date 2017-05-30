@@ -6,18 +6,18 @@ public class Pedido {
     private int idDireccion;
     private int idEstado;
     private String fechaSalida;
-    private String idUsuario;
+    private String correo;
     private String fechaEntrega;
 
     public Pedido() {
     }
 
-    public Pedido(long idPedido, int idDireccion, int idEstado, String fechaSalida, String fechaEntrega, String idUsuario) {
+    public Pedido(long idPedido, int idDireccion, int idEstado, String fechaSalida, String fechaEntrega, String correo) {
         this.idPedido = idPedido;
         this.idDireccion = idDireccion;
         this.idEstado = idEstado;
         this.fechaSalida = fechaSalida;
-        this.idUsuario = idUsuario;
+        this.correo = correo;
         this.fechaEntrega = fechaEntrega;
     }
 
@@ -53,12 +53,12 @@ public class Pedido {
         this.fechaSalida = fechaSalida;
     }
 
-    public String getIdUsuario() {
-        return idUsuario;
+    public String getCorreo() {
+        return correo;
     }
 
-    public void setIdUsuario(String idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 
     public String getFechaEntrega() {
@@ -71,7 +71,7 @@ public class Pedido {
 
     @Override
     public String toString() {
-        return "Pedido{" + "idPedido=" + idPedido + ", idDireccion=" + idDireccion + ", idEstado=" + idEstado + ", fechaSalida=" + fechaSalida + ", idUsuario=" + idUsuario + ", fechaEntrega=" + fechaEntrega + '}';
+        return "Pedido{" + "idPedido=" + idPedido + ", idDireccion=" + idDireccion + ", idEstado=" + idEstado + ", fechaSalida=" + fechaSalida + ", correo=" + correo + ", fechaEntrega=" + fechaEntrega + '}';
     }
 
 }

@@ -123,7 +123,7 @@ public class Conexion {
             stmt.setInt(1, p.getIdDireccion());
             stmt.setInt(2, p.getIdEstado());
             stmt.setDate(3, fechaSalidaSQL);
-            stmt.setString(4, p.getIdUsuario());
+            stmt.setString(4, p.getCorreo());
             stmt.setDate(5, fechaEntregaSQL);
             res = stmt.executeUpdate();
             finalizarConexion();
