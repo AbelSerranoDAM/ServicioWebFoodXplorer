@@ -431,7 +431,7 @@ public class Conexion {
         try {
             ResultSet rset;
             lista = new ArrayList();
-            String sql = "SELECT * FROM LineasPedidos WHERE idPedidos = ?";
+            String sql = "SELECT * FROM lineasPedidos WHERE idPedidos = ?";
             PreparedStatement stmt = getConnection().prepareStatement(sql);
             stmt.setInt(1, idPedido);
             rset = stmt.executeQuery();
