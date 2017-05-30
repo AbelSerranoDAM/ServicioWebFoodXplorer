@@ -66,7 +66,7 @@ public class Conexion {
     public boolean insertarUsuario(Usuario u) {
         int res = 0;
         try {
-            String sql = "INSERT INTO Usuarios (correo, contrasena) VALUES (?, ?)";
+            String sql = "INSERT INTO usuarios (correo, contrasena) VALUES (?, ?)";
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setString(1, u.getCorreo());
             stmt.setString(2, u.getContrasena());
@@ -121,7 +121,7 @@ public class Conexion {
      */
     public boolean insertarPedido(Pedido p) throws ParseException {
         int res = 0;
-        String sql = "INSERT INTO Pedidos (Direcciones_idDireccion, idEstado, fecha_pedido, Usuarios_idUsuarios, fecha_entrega) "
+        String sql = "INSERT INTO pedidos (Direcciones_idDireccion, idEstado, fecha_pedido, Usuarios_idUsuarios, fecha_entrega) "
                 + "VALUES (?,?,?,?,?)";
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         java.util.Date fechaSalida = formatter.parse(p.getFechaSalida());
@@ -152,7 +152,7 @@ public class Conexion {
     public boolean insertarLineasPedido(LineasPedido lp) {
         int res = 0;
         try {
-            String sql = "INSERT INTO LineasPedidos (idPedidos, Producto_idProducto, cantidad, precio, IVA) VALUES (?,?,?,?,?)";
+            String sql = "INSERT INTO lineasPedidos (idPedidos, Producto_idProducto, cantidad, precio, IVA) VALUES (?,?,?,?,?)";
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setInt(1, lp.getIdPedido());
             stmt.setInt(2, lp.getIdProducto());
@@ -178,7 +178,7 @@ public class Conexion {
         try {
             ResultSet rset;
             lista = new ArrayList();
-            String sql = "SELECT * FROM Productos WHERE activo = 1 AND tipoProductos_idTipoProducto = ?";
+            String sql = "SELECT * FROM productos WHERE activo = 1 AND tipoProductos_idTipoProducto = ?";
             PreparedStatement stmt = getConnection().prepareStatement(sql);
             stmt.setInt(1, idTipoProducto);
             rset = stmt.executeQuery();
@@ -204,7 +204,7 @@ public class Conexion {
         try {
             ResultSet rset;
             lista = new ArrayList();
-            String sql = "SELECT * FROM Direcciones WHERE usuarios_idUsuarios = ?";
+            String sql = "SELECT * FROM direcciones WHERE usuarios_idUsuarios = ?";
             PreparedStatement stmt = getConnection().prepareStatement(sql);
             stmt.setInt(1, idUsuario);
             rset = stmt.executeQuery();
@@ -272,7 +272,7 @@ public class Conexion {
         try {
             ResultSet rset;
             lista = new ArrayList();
-            String sql = "SELECT * FROM Productos WHERE ofertaDescuento <> 0 AND activo = 1";
+            String sql = "SELECT * FROM productos WHERE ofertaDescuento <> 0 AND activo = 1";
             PreparedStatement stmt = getConnection().prepareStatement(sql);
             rset = stmt.executeQuery();
             while (rset.next()) {
@@ -296,7 +296,7 @@ public class Conexion {
         try {
             ResultSet rset;
             lista = new ArrayList();
-            String sql = "SELECT * FROM Productos";
+            String sql = "SELECT * FROM productos";
             PreparedStatement stmt = getConnection().prepareStatement(sql);
             rset = stmt.executeQuery();
             while (rset.next()) {
@@ -321,7 +321,7 @@ public class Conexion {
         try {
             ResultSet rset;
             lista = new ArrayList();
-            String sql = "SELECT * FROM Pedidos WHERE Usuarios_correo = ?";
+            String sql = "SELECT * FROM pedidos WHERE Usuarios_correo = ?";
             PreparedStatement stmt = getConnection().prepareStatement(sql);
             stmt.setString(1, correo);
             rset = stmt.executeQuery();
@@ -348,7 +348,7 @@ public class Conexion {
         Pedido p = null;
         try {
             ResultSet rset;
-            String sql = "SELECT * FROM Pedidos WHERE idPedidos = ?";
+            String sql = "SELECT * FROM pedidos WHERE idPedidos = ?";
             PreparedStatement stmt = getConnection().prepareStatement(sql);
             stmt.setString(1, idPedido);
             rset = stmt.executeQuery();
