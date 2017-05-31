@@ -345,8 +345,13 @@ public class Conexion {
             SimpleDateFormat salida = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
             SimpleDateFormat entrega = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
             while (rset.next()) {
-                lista.add(new Pedido(rset.getLong(1), rset.getInt(2), rset.getInt(3), salida.format(rset.getDate(4)),
-                        entrega.format(rset.getDate(5)), rset.getString(6)));
+                if (rset.getDate(5) == null) {
+                    lista.add(new Pedido(rset.getLong(1), rset.getInt(2), rset.getInt(3), salida.format(rset.getDate(4)),
+                            null, rset.getString(6)));
+                } else {
+                    lista.add(new Pedido(rset.getLong(1), rset.getInt(2), rset.getInt(3), salida.format(rset.getDate(4)),
+                            entrega.format(rset.getDate(5)), rset.getString(6)));
+                }
             }
             finalizarConexion();
         } catch (SQLException ex) {
@@ -526,8 +531,14 @@ public class Conexion {
             SimpleDateFormat salida = new SimpleDateFormat("dd-MM-yyyy");
             SimpleDateFormat entrega = new SimpleDateFormat("dd-MM-yyyy");
             while (rset.next()) {
-                lista.add(new Pedido(rset.getLong(1), rset.getInt(2), rset.getInt(3), salida.format(rset.getDate(4)),
-                        entrega.format(rset.getDate(5)), rset.getString(6)));
+                if (rset.getDate(5) == null) {
+                    lista.add(new Pedido(rset.getLong(1), rset.getInt(2), rset.getInt(3), salida.format(rset.getDate(4)),
+                            null, rset.getString(6)));
+                } else {
+                    lista.add(new Pedido(rset.getLong(1), rset.getInt(2), rset.getInt(3), salida.format(rset.getDate(4)),
+                            entrega.format(rset.getDate(5)), rset.getString(6)));
+                }
+
             }
             finalizarConexion();
         } catch (SQLException ex) {
