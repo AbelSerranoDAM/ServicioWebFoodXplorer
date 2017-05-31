@@ -6,8 +6,8 @@ public class Pedido {
     private int idDireccion;
     private int idEstado;
     private String fechaSalida;
-    private String correo;
     private String fechaEntrega;
+    private String correo;
 
     public Pedido() {
     }
