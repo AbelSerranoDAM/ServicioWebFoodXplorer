@@ -88,7 +88,7 @@ public class Conexion {
         int res = 0;
         PreparedStatement stmt;
         ResultSet rset;
-        int idDireccion=0;
+        int idDireccion = 0;
         try {
             if (d.getIdUsuario() != 0) {
                 String sql = "INSERT INTO direcciones (calle, piso, poblacion, codPostal, Usuarios_idUsuarios) VALUES (?,?,?,?,?)";
@@ -107,14 +107,14 @@ public class Conexion {
                 stmt.setString(4, d.getCodPostal());
             }
             res = stmt.executeUpdate();
-            if(res==1){
+            if (res == 1) {
                 String sql2 = "SELECT idDireccion from direcciones WHERE Calle = ? AND Piso = ?";
                 stmt = connection.prepareStatement(sql2);
                 stmt.setString(1, d.getCalle());
                 stmt.setString(2, d.getPiso());
-                rset=stmt.executeQuery();
+                rset = stmt.executeQuery();
                 rset.next();
-                idDireccion=rset.getInt(1);
+                idDireccion = rset.getInt(1);
             }
             finalizarConexion();
         } catch (SQLException ex) {
@@ -132,20 +132,27 @@ public class Conexion {
      */
     public boolean insertarPedido(Pedido p) throws ParseException {
         int res = 0;
-        String sql = "INSERT INTO pedidos (Direcciones_idDireccion, idEstado, fecha_pedido, Usuarios_idUsuarios, fecha_entrega) "
+        String sql = "INSERT INTO pedidos (Direcciones_idDireccion, idEstado, fecha_pedido, correo, fecha_entrega) "
                 + "VALUES (?,?,?,?,?)";
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         java.util.Date fechaSalida = formatter.parse(p.getFechaSalida());
         java.sql.Date fechaSalidaSQL = new java.sql.Date(fechaSalida.getTime());
-        java.util.Date fechaEntrega = formatter.parse(p.getFechaEntrega());
-        java.sql.Date fechaEntregaSQL = new java.sql.Date(fechaEntrega.getTime());
+
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
+            if (p.getFechaEntrega() != null) {
+                java.util.Date fechaEntrega = formatter.parse(p.getFechaEntrega());
+                java.sql.Date fechaEntregaSQL = new java.sql.Date(fechaEntrega.getTime());
+                stmt.setDate(5, fechaEntregaSQL);
+            }
+            else{
+                stmt.setNull(5, java.sql.Types.INTEGER);
+            }
             stmt.setInt(1, p.getIdDireccion());
             stmt.setInt(2, p.getIdEstado());
             stmt.setDate(3, fechaSalidaSQL);
             stmt.setString(4, p.getCorreo());
-            stmt.setDate(5, fechaEntregaSQL);
+            System.out.println(stmt.toString());
             res = stmt.executeUpdate();
             finalizarConexion();
         } catch (SQLException ex) {
@@ -332,15 +339,15 @@ public class Conexion {
         try {
             ResultSet rset;
             lista = new ArrayList();
-            String sql = "SELECT * FROM pedidos WHERE Usuarios_correo = ?";
+            String sql = "SELECT * FROM pedidos WHERE correo = ?";
             PreparedStatement stmt = getConnection().prepareStatement(sql);
             stmt.setString(1, correo);
             rset = stmt.executeQuery();
-            SimpleDateFormat salida = new SimpleDateFormat("dd-MM-yyyy");
-            SimpleDateFormat entrega = new SimpleDateFormat("dd-MM-yyyy");
+            SimpleDateFormat salida = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+            SimpleDateFormat entrega = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
             while (rset.next()) {
                 lista.add(new Pedido(rset.getLong(1), rset.getInt(2), rset.getInt(3), salida.format(rset.getDate(4)),
-                        rset.getString(5), entrega.format(rset.getDate(6))));
+                        salida.format(rset.getDate(5)), entrega.format(rset.getString(6))));
             }
             finalizarConexion();
         } catch (SQLException ex) {
