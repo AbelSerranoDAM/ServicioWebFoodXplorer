@@ -163,8 +163,8 @@ public class GenericResource {
     @POST
     @Path("direccion/insertar")
     @Consumes(MediaType.APPLICATION_JSON)
-    public boolean insertarDireccion(String d) {
-        boolean result;
+    public int insertarDireccion(String d) {
+        int result;
         Conexion conexion = new Conexion();
         Gson gson = new Gson();
         Direccion dir;

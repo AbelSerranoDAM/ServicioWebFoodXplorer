@@ -84,9 +84,11 @@ public class Conexion {
      * @param d DIRECCION
      * @return RESULTADO INSERCIÓN
      */
-    public boolean insertarDireccion(Direccion d) {
+    public int insertarDireccion(Direccion d) {
         int res = 0;
         PreparedStatement stmt;
+        ResultSet rset;
+        int idDireccion=0;
         try {
             if (d.getIdUsuario() != 0) {
                 String sql = "INSERT INTO direcciones (calle, piso, poblacion, codPostal, Usuarios_idUsuarios) VALUES (?,?,?,?,?)";
@@ -105,11 +107,20 @@ public class Conexion {
                 stmt.setString(4, d.getCodPostal());
             }
             res = stmt.executeUpdate();
+            if(res==1){
+                String sql2 = "SELECT idDireccion from direcciones WHERE Calle = ? AND Piso = ?";
+                stmt = connection.prepareStatement(sql2);
+                stmt.setString(1, d.getCalle());
+                stmt.setString(2, d.getPiso());
+                rset=stmt.executeQuery();
+                rset.next();
+                idDireccion=rset.getInt(1);
+            }
             finalizarConexion();
         } catch (SQLException ex) {
             Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return (res == 1);
+        return idDireccion;
     }
 
     /**
@@ -527,7 +538,7 @@ public class Conexion {
      * @throws SQLException
      */
     public boolean actualizarEstado(Estado es) throws SQLException {
-        String sql = "UPDATE estados SET nomEstado = ?, tiempo = ? WHERE idEstados = ?";
+        String sql = "UPDATE stados SET nomEstado = ?, tiempo = ? WHERE idEstados = ?";
         PreparedStatement stmt = connection.prepareStatement(sql);
         stmt.setString(1, es.getNombreEstado());
         stmt.setInt(2, es.getTiempo());
