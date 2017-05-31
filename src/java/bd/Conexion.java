@@ -144,8 +144,7 @@ public class Conexion {
                 java.util.Date fechaEntrega = formatter.parse(p.getFechaEntrega());
                 java.sql.Date fechaEntregaSQL = new java.sql.Date(fechaEntrega.getTime());
                 stmt.setDate(5, fechaEntregaSQL);
-            }
-            else{
+            } else {
                 stmt.setNull(5, java.sql.Types.INTEGER);
             }
             stmt.setInt(1, p.getIdDireccion());
@@ -347,7 +346,7 @@ public class Conexion {
             SimpleDateFormat entrega = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
             while (rset.next()) {
                 lista.add(new Pedido(rset.getLong(1), rset.getInt(2), rset.getInt(3), salida.format(rset.getDate(4)),
-                        salida.format(rset.getDate(5)), entrega.format(rset.getString(6))));
+                        entrega.format(rset.getDate(5)), rset.getString(6)));
             }
             finalizarConexion();
         } catch (SQLException ex) {
@@ -540,16 +539,15 @@ public class Conexion {
     /**
      * ACTUALIZAR ESTADO DEL PRODUCTO
      *
-     * @param es
+     * @param p
      * @return RESULTADO DE LA ACTUALIZACION
      * @throws SQLException
      */
-    public boolean actualizarEstado(Estado es) throws SQLException {
-        String sql = "UPDATE stados SET nomEstado = ?, tiempo = ? WHERE idEstados = ?";
+    public boolean actualizarEstadoPedido(Pedido p) throws SQLException {
+        String sql = "UPDATE pedidos SET idEstado = ? WHERE idPedidos = ?";
         PreparedStatement stmt = connection.prepareStatement(sql);
-        stmt.setString(1, es.getNombreEstado());
-        stmt.setInt(2, es.getTiempo());
-        stmt.setInt(3, es.getIdEstado());
+        stmt.setInt(1, p.getIdEstado());
+        stmt.setLong(2, p.getIdPedido());
         int res = stmt.executeUpdate();
         return res == 1;
     }
