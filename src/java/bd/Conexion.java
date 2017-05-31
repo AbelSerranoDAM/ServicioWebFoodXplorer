@@ -136,7 +136,9 @@ public class Conexion {
                 + "VALUES (?,?,?,?,?)";
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         java.util.Date fechaSalida = formatter.parse(p.getFechaSalida());
-        java.sql.Date fechaSalidaSQL = new java.sql.Date(fechaSalida.getTime());
+        java.sql.Timestamp fechaSalidaSQL = new java.sql.Timestamp(fechaSalida.getTime());
+        System.out.println(fechaSalida);
+        System.out.println(fechaSalidaSQL);
 
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
@@ -149,7 +151,7 @@ public class Conexion {
             }
             stmt.setInt(1, p.getIdDireccion());
             stmt.setInt(2, p.getIdEstado());
-            stmt.setDate(3, fechaSalidaSQL);
+            stmt.setTimestamp(3, fechaSalidaSQL);
             stmt.setString(4, p.getCorreo());
             System.out.println(stmt.toString());
             res = stmt.executeUpdate();
