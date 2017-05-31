@@ -134,7 +134,7 @@ public class Conexion {
         int res = 0;
         String sql = "INSERT INTO pedidos (Direcciones_idDireccion, idEstado, fecha_pedido, Usuarios_idUsuarios, fecha_entrega) "
                 + "VALUES (?,?,?,?,?)";
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         java.util.Date fechaSalida = formatter.parse(p.getFechaSalida());
         java.sql.Date fechaSalidaSQL = new java.sql.Date(fechaSalida.getTime());
         java.util.Date fechaEntrega = formatter.parse(p.getFechaEntrega());
