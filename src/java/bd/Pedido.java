@@ -1,5 +1,7 @@
 package bd;
 
+import java.util.ArrayList;
+
 public class Pedido {
 
     private long idPedido;
@@ -68,6 +70,8 @@ public class Pedido {
     public void setFechaEntrega(String fechaEntrega) {
         this.fechaEntrega = fechaEntrega;
     }
+
+    
 
     @Override
     public String toString() {

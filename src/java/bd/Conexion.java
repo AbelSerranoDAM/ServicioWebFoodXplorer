@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -130,7 +131,7 @@ public class Conexion {
      * @return RESULTADO INSERCIÓN
      * @throws ParseException
      */
-    public boolean insertarPedido(Pedido p) throws ParseException {
+    public int insertarPedido(Pedido p) throws ParseException {
         int res = 0;
         String sql = "INSERT INTO pedidos (Direcciones_idDireccion, idEstado, fecha_pedido, correo, fecha_entrega) "
                 + "VALUES (?,?,?,?,?)";
@@ -141,7 +142,7 @@ public class Conexion {
         System.out.println(fechaSalidaSQL);
 
         try {
-            PreparedStatement stmt = connection.prepareStatement(sql);
+            PreparedStatement stmt = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
             if (p.getFechaEntrega() != null) {
                 java.util.Date fechaEntrega = formatter.parse(p.getFechaEntrega());
                 java.sql.Date fechaEntregaSQL = new java.sql.Date(fechaEntrega.getTime());
@@ -154,12 +155,15 @@ public class Conexion {
             stmt.setTimestamp(3, fechaSalidaSQL);
             stmt.setString(4, p.getCorreo());
             System.out.println(stmt.toString());
-            res = stmt.executeUpdate();
+            stmt.executeUpdate();
+            ResultSet rset=  stmt.getGeneratedKeys();  
+            rset.next(); 
+            res= rset.getInt(1);
             finalizarConexion();
         } catch (SQLException ex) {
             Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return (res == 1);
+        return res;
     }
 
     /**
@@ -348,11 +352,11 @@ public class Conexion {
             SimpleDateFormat entrega = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
             while (rset.next()) {
                 if (rset.getDate(5) == null) {
-                    lista.add(new Pedido(rset.getLong(1), rset.getInt(2), rset.getInt(3), salida.format(rset.getDate(4)),
+                    lista.add(new Pedido(rset.getLong(1), rset.getInt(2), rset.getInt(3), salida.format(rset.getTimestamp(4)),
                             null, rset.getString(6)));
                 } else {
                     lista.add(new Pedido(rset.getLong(1), rset.getInt(2), rset.getInt(3), salida.format(rset.getDate(4)),
-                            entrega.format(rset.getDate(5)), rset.getString(6)));
+                            entrega.format(rset.getTimestamp(5)), rset.getString(6)));
                 }
             }
             finalizarConexion();
@@ -534,11 +538,11 @@ public class Conexion {
             SimpleDateFormat entrega = new SimpleDateFormat("dd-MM-yyyy");
             while (rset.next()) {
                 if (rset.getDate(5) == null) {
-                    lista.add(new Pedido(rset.getLong(1), rset.getInt(2), rset.getInt(3), salida.format(rset.getDate(4)),
+                    lista.add(new Pedido(rset.getLong(1), rset.getInt(2), rset.getInt(3), salida.format(rset.getTimestamp(4)),
                             null, rset.getString(6)));
                 } else {
                     lista.add(new Pedido(rset.getLong(1), rset.getInt(2), rset.getInt(3), salida.format(rset.getDate(4)),
-                            entrega.format(rset.getDate(5)), rset.getString(6)));
+                            entrega.format(rset.getTimestamp(5)), rset.getString(6)));
                 }
 
             }

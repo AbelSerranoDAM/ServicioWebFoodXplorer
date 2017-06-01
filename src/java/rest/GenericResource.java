@@ -176,8 +176,8 @@ public class GenericResource {
     @POST
     @Path("pedido/insertar")
     @Consumes(MediaType.APPLICATION_JSON)
-    public boolean insertarPedido(String p) throws ParseException {
-        boolean result;
+    public int insertarPedido(String p) throws ParseException {
+        int result;
         Conexion conexion = new Conexion();
         Gson gson = new Gson();
         Pedido ped;
@@ -195,6 +195,7 @@ public class GenericResource {
         Gson gson = new Gson();
         LineasPedido lin;
         lin = gson.fromJson(lp, LineasPedido.class);
+        System.out.println("la linea a insertar es: "+lp);
         result = conexion.insertarLineasPedido(lin);
         return result;
     }

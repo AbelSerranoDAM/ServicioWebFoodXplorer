@@ -1,5 +1,7 @@
 package bd;
 
+import java.util.ArrayList;
+
 public class Producto {
 
     private int idProducto;
@@ -12,6 +14,7 @@ public class Producto {
     private int activo;
     private int idTipoProducto;
     private String urlImagen;
+    private ArrayList<LineasPedido> lineas;
 
     public Producto() {
     }
@@ -99,6 +102,15 @@ public class Producto {
     public void setIdTipoProducto(int idTipoProducto) {
         this.idTipoProducto = idTipoProducto;
     }
+
+    public ArrayList<LineasPedido> getLineas() {
+        return lineas;
+    }
+
+    public void setLineas(ArrayList<LineasPedido> lineas) {
+        this.lineas = lineas;
+    }
+    
 
     @Override
     public String toString() {

@@ -59,6 +59,8 @@ public class LineasPedido {
         this.iva = iva;
     }
 
+    
+    
     @Override
     public String toString() {
         return "LineasPedidos{" + "idPedido=" + idPedido + ", idProducto=" + idProducto + ", cantidad=" + cantidad + ", precio=" + precio + ", iva=" + iva + '}';
