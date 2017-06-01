@@ -93,7 +93,7 @@ public class Conexion {
         try {
             if (d.getIdUsuario() != 0) {
                 String sql = "INSERT INTO direcciones (calle, piso, poblacion, codPostal, Usuarios_idUsuarios) VALUES (?,?,?,?,?)";
-                stmt = connection.prepareStatement(sql);
+                stmt = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
                 stmt.setString(1, d.getCalle());
                 stmt.setString(2, d.getPiso());
                 stmt.setString(3, d.getPoblacion());
@@ -101,22 +101,16 @@ public class Conexion {
                 stmt.setInt(5, d.getIdUsuario());
             } else {
                 String sql = "INSERT INTO direcciones (calle, piso, poblacion, codPostal) VALUES (?,?,?,?)";
-                stmt = connection.prepareStatement(sql);
+                stmt = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
                 stmt.setString(1, d.getCalle());
                 stmt.setString(2, d.getPiso());
                 stmt.setString(3, d.getPoblacion());
                 stmt.setString(4, d.getCodPostal());
             }
-            res = stmt.executeUpdate();
-            if (res == 1) {
-                String sql2 = "SELECT idDireccion from direcciones WHERE Calle = ? AND Piso = ?";
-                stmt = connection.prepareStatement(sql2);
-                stmt.setString(1, d.getCalle());
-                stmt.setString(2, d.getPiso());
-                rset = stmt.executeQuery();
-                rset.next();
-                idDireccion = rset.getInt(1);
-            }
+            stmt.executeUpdate();
+            rset=  stmt.getGeneratedKeys();  
+            rset.next(); 
+            idDireccion= rset.getInt(1);
             finalizarConexion();
         } catch (SQLException ex) {
             Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
