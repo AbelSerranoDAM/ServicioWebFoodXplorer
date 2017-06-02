@@ -93,7 +93,7 @@ public class Conexion {
         try {
             if (d.getIdUsuario() != 0) {
                 String sql = "INSERT INTO direcciones (calle, piso, poblacion, codPostal, Usuarios_idUsuarios) VALUES (?,?,?,?,?)";
-                stmt = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+                stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 stmt.setString(1, d.getCalle());
                 stmt.setString(2, d.getPiso());
                 stmt.setString(3, d.getPoblacion());
@@ -101,16 +101,16 @@ public class Conexion {
                 stmt.setInt(5, d.getIdUsuario());
             } else {
                 String sql = "INSERT INTO direcciones (calle, piso, poblacion, codPostal) VALUES (?,?,?,?)";
-                stmt = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+                stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 stmt.setString(1, d.getCalle());
                 stmt.setString(2, d.getPiso());
                 stmt.setString(3, d.getPoblacion());
                 stmt.setString(4, d.getCodPostal());
             }
             stmt.executeUpdate();
-            rset=  stmt.getGeneratedKeys();  
-            rset.next(); 
-            idDireccion= rset.getInt(1);
+            rset = stmt.getGeneratedKeys();
+            rset.next();
+            idDireccion = rset.getInt(1);
             finalizarConexion();
         } catch (SQLException ex) {
             Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
@@ -136,7 +136,7 @@ public class Conexion {
         System.out.println(fechaSalidaSQL);
 
         try {
-            PreparedStatement stmt = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             if (p.getFechaEntrega() != null) {
                 java.util.Date fechaEntrega = formatter.parse(p.getFechaEntrega());
                 java.sql.Date fechaEntregaSQL = new java.sql.Date(fechaEntrega.getTime());
@@ -150,9 +150,9 @@ public class Conexion {
             stmt.setString(4, p.getCorreo());
             System.out.println(stmt.toString());
             stmt.executeUpdate();
-            ResultSet rset=  stmt.getGeneratedKeys();  
-            rset.next(); 
-            res= rset.getInt(1);
+            ResultSet rset = stmt.getGeneratedKeys();
+            rset.next();
+            res = rset.getInt(1);
             finalizarConexion();
         } catch (SQLException ex) {
             Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
@@ -561,6 +561,50 @@ public class Conexion {
         stmt.setLong(2, p.getIdPedido());
         int res = stmt.executeUpdate();
         return res == 1;
+    }
+
+    public boolean actualizarEstadoPedidoEnReparto(Pedido p) throws SQLException {
+        String sql = "UPDATE pedidos SET idEstado = ? WHERE idPedidos = ?";
+        PreparedStatement stmt = connection.prepareStatement(sql);
+        stmt.setInt(1, p.getIdEstado());
+        stmt.setLong(2, p.getIdPedido());
+        int res = stmt.executeUpdate();
+        return res == 1;
+    }
+
+    public boolean actualizarEstadoPedidoEntregado(Pedido p) throws SQLException {
+        String sql = "UPDATE pedidos SET idEstado = 4 WHERE idPedidos = ?";
+        PreparedStatement stmt = connection.prepareStatement(sql);
+        stmt.setLong(1, p.getIdPedido());
+        int res = stmt.executeUpdate();
+        return res == 1;
+    }
+
+    public List<Pedido> obtenerPedidosParaRepartir() {
+        List<Pedido> lista = null;
+        try {
+            ResultSet rset;
+            lista = new ArrayList();
+            String sql = "SELECT * FROM pedidos WHERE idEstado = 2 OR idEstado = 3";
+            PreparedStatement stmt = getConnection().prepareStatement(sql);
+            rset = stmt.executeQuery();
+            SimpleDateFormat salida = new SimpleDateFormat("dd-MM-yyyy");
+            SimpleDateFormat entrega = new SimpleDateFormat("dd-MM-yyyy");
+            while (rset.next()) {
+                if (rset.getDate(5) == null) {
+                    lista.add(new Pedido(rset.getLong(1), rset.getInt(2), rset.getInt(3), salida.format(rset.getDate(4)),
+                            null, rset.getString(6)));
+                } else {
+                    lista.add(new Pedido(rset.getLong(1), rset.getInt(2), rset.getInt(3), salida.format(rset.getDate(4)),
+                            entrega.format(rset.getDate(5)), rset.getString(6)));
+                }
+
+            }
+            finalizarConexion();
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return lista;
     }
 
     public boolean eliminarCliente(int id) throws SQLException {

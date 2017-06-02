@@ -195,7 +195,7 @@ public class GenericResource {
         Gson gson = new Gson();
         LineasPedido lin;
         lin = gson.fromJson(lp, LineasPedido.class);
-        System.out.println("la linea a insertar es: "+lp);
+        System.out.println("la linea a insertar es: " + lp);
         result = conexion.insertarLineasPedido(lin);
         return result;
     }
@@ -291,6 +291,51 @@ public class GenericResource {
             Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         return result;
+    }
+
+    @POST
+    @Path("actualizarEstadoPedidoEntregado")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public boolean actualizarEstadoPedidoEntregado(String ped) {
+        boolean result = false;
+        Conexion conexion = new Conexion();
+        Gson gson = new Gson();
+        Pedido p;
+        p = gson.fromJson(ped, Pedido.class);
+        try {
+            result = conexion.actualizarEstadoPedidoEntregado(p);
+        } catch (SQLException ex) {
+            Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
+    }
+
+    @POST
+    @Path("actualizarEstadoPedidoEnReparto")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public boolean actualizarEstadoPedidoEnReparto(String ped) {
+        boolean result = false;
+        Conexion conexion = new Conexion();
+        Gson gson = new Gson();
+        Pedido p;
+        p = gson.fromJson(ped, Pedido.class);
+        try {
+            result = conexion.actualizarEstadoPedidoEnReparto(p);
+        } catch (SQLException ex) {
+            Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
+    }
+
+    @GET
+    @Path("/obtenerPedidosParaRepartir")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String listarPedidosParaRepartir() {
+        Conexion conexion = new Conexion();
+        List<Pedido> lp;
+        lp = conexion.obtenerPedidosParaRepartir();
+        Gson gson = new Gson();
+        return gson.toJson(lp);
     }
 
 }
