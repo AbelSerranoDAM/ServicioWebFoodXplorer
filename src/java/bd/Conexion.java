@@ -414,8 +414,8 @@ public class Conexion {
      * @param password
      * @return RESULTADO DEL LOGUEO
      */
-    public boolean loguear(String correo, String password) {
-        boolean estado = false;
+    public Integer loguear(String correo, String password) {
+        int estado = -1;
         ResultSet rset;
         try {
             String sql = "SELECT * FROM usuarios WHERE correo = ? AND contrasena = ?";
@@ -425,7 +425,7 @@ public class Conexion {
             stmt.setString(2, password);
             rset = stmt.executeQuery();
             if (rset.next()) {
-                estado = true;
+                estado = rset.getInt(1);
             }
             System.out.println(estado);
             finalizarConexion();

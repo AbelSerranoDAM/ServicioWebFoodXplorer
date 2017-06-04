@@ -235,8 +235,8 @@ public class GenericResource {
 
     @GET
     @Path("/loguearUsuario/{nombre}/{password}")
-    public boolean loguear(@PathParam("nombre") String nombre, @PathParam("password") String password) {
-        boolean estado;
+    public Integer loguear(@PathParam("nombre") String nombre, @PathParam("password") String password) {
+        int estado;
         Conexion conexion = new Conexion();
         estado = conexion.loguear(nombre, password);
         return estado;
