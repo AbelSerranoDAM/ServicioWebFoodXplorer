@@ -338,4 +338,21 @@ public class GenericResource {
         return gson.toJson(lp);
     }
 
+    @POST
+    @Path("actualizarFechaEntregaPedido")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public boolean actualizarFechaEntregaPedido(String ped) {
+        boolean result = false;
+        Conexion conexion = new Conexion();
+        Gson gson = new Gson();
+        Pedido p;
+        p = gson.fromJson(ped, Pedido.class);
+        try {
+            result = conexion.actualizarFechaEntrega(p);
+        } catch (SQLException ex) {
+            Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
+    }
+
 }
